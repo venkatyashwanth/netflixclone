@@ -1,0 +1,47 @@
+// -------------------------
+// Colors
+// -------------------------
+$color-primary: #e50914; // Netflix red
+$color-dark: #141414;
+$color-light: #ffffff;
+
+// -------------------------
+// Breakpoints
+// -------------------------
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+$breakpoint-large: 1440px;
+
+// -------------------------
+// Typography Scale
+// -------------------------
+
+// Font families
+$font-family-base: 'Helvetica Neue', Arial, sans-serif;
+
+// Headings
+$font-size-h1-mobile: 2rem;
+$font-size-h1-tablet: 2.5rem;
+$font-size-h1-desktop: 3rem;
+
+$font-size-h2-mobile: 1.5rem;
+$font-size-h2-tablet: 2rem;
+$font-size-h2-desktop: 2.25rem;
+
+$font-size-h3-mobile: 1.25rem;
+$font-size-h3-tablet: 1.5rem;
+$font-size-h3-desktop: 1.75rem;
+
+// Paragraphs
+$font-size-p-mobile: 1rem;
+$font-size-p-tablet: 1.1rem;
+$font-size-p-desktop: 1.2rem;
+
+// Small text
+$font-size-small: 0.875rem;
+
+// Font weights
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;

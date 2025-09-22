@@ -1,0 +1,13 @@
+✅ Navigation Behavior
+    - Mobile (≤480px) → bottom navigation bar (icons only, fixed bottom).
+    - Tablet (481–1023px) → top navigation, compact (logo + few links + hamburger).
+    - Desktop (≥1024px) → full navigation bar with logo, links, search, profile.
+
+✅ Step 1: Component Structure
+
+components/layout/
+ ├─ Navigation.jsx
+ ├─ Navigation.module.scss
+ ├─ MobileNav.jsx
+ ├─ TabletNav.jsx
+ └─ DesktopNav.jsx
