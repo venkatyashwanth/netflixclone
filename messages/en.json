@@ -1,0 +1,31 @@
+{
+  "Login": {
+    "title": "login",
+    "placeholder": {
+      "email": "email",
+      "password":"password"
+    },
+    "signin": "sign in",
+    "signup": "sign up",
+    "prompttext": "Don’t have an account?"
+  },
+  "Signup":{
+    "title": "sign up",
+    "placeholder": {
+      "fullname": "full name",
+      "email": "email",
+      "password": "password"
+    },
+    "createaccount": "create account",
+    "prompttext": "Already have an account?",
+    "login": "log in"
+  },
+  "Navigation":{
+    "signin": "sign in",
+    "language": "language"
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, te {te Telugu} en {en English} hi {hi Hindi} other {Unknown}}"
+  }
+}

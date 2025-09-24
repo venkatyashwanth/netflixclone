@@ -1,12 +1,15 @@
+import { useTranslations } from "next-intl";
 import styles from "@/styles/components/Navigation.module.scss";
+import LocaleSwitcherSelect from "./LocaleSwitcherSelect";
+import { Link } from "@/i18n/navigation";
 
 export default function DesktopNav({ isAuthenticated }) {
+  const t = useTranslations('Navigation');
   return (
     <div className={styles.desktopNav}>
       <div className={styles.logo}>
-        <img src="/logo.svg" alt="logo" width={"100px"} color={"rgb(229, 9, 20)"} fill={"currentcolor"}/>
-        {/* Netflix */}
-        </div>
+        <img src="/logo.svg" alt="logo" width={"100px"} color={"rgb(229, 9, 20)"} fill={"currentcolor"} />
+      </div>
       <nav>
         {isAuthenticated ? (
           <>
@@ -17,8 +20,8 @@ export default function DesktopNav({ isAuthenticated }) {
           </>
         ) : (
           <>
-            <a href="#">Sign In</a>
-            <a href="#">🌐 Language</a>
+            <LocaleSwitcherSelect />
+            <Link href="/login">{t("signin")}</Link>
           </>
         )}
       </nav>
