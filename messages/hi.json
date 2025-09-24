@@ -1,0 +1,31 @@
+{
+  "Login": {
+    "title": "लॉगिन",
+    "placeholder": {
+      "email": "ईमेल",
+      "password": "पासवर्ड"
+    },
+    "signin": "साइन इन",
+    "signup": "साइन अप",
+    "prompttext": "क्या आपका खाता नहीं है?"
+  },
+  "Signup": {
+    "title": "साइन अप",
+    "placeholder": {
+      "fullname": "पूरा नाम",
+      "email": "ईमेल",
+      "password": "पासवर्ड"
+    },
+    "createaccount": "खाता बनाएं",
+    "prompttext": "क्या आपके पास पहले से खाता है?",
+    "login": "लॉग इन"
+  },
+  "Navigation": {
+    "signin": "साइन इन",
+    "language": "भाषा"
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, te {te तेलुगु} en {en अंग्रेज़ी} hi {hi हिन्दी} other {अज्ञात}}"
+  }
+}

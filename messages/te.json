@@ -1,0 +1,31 @@
+{
+  "Login": {
+    "title": "లాగిన్",
+    "placeholder": {
+      "email": "ఈమెయిల్",
+      "password": "పాస్‌వర్డ్"
+    },
+    "signin": "సైన్ ఇన్",
+    "signup": "సైన్ అప్",
+    "prompttext": "మీకు ఖాతా లేదా?"
+  },
+  "Signup": {
+    "title": "సైన్ అప్",
+    "placeholder": {
+      "fullname": "పూర్తి పేరు",
+      "email": "ఈమెయిల్",
+      "password": "పాస్వర్డ్"
+    },
+    "createaccount": "ఖాతా సృష్టించండి",
+    "prompttext": "ఇప్పటికే ఖాతా ఉందా?",
+    "login": "లాగిన్"
+  },
+  "Navigation": {
+    "signin": "సైన్ ఇన్",
+    "language": "భాష"
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, te {te తెలుగు} en {en ఇంగ్లీష్} hi {hi హిందీ} other {తెలియదు}}"
+  }
+}
