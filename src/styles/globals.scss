@@ -1,6 +1,5 @@
-/* Import variables and mixins */
-@import "./variables";
-@import "./mixins";
+/* Import everything from abstracts */
+@use "./abstracts" as *;
 
 /* -------------------------
    1. Reset
@@ -17,7 +16,7 @@ html,
 body {
   height: 100%;
   width: 100%;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-family: $font-family-base;
   background-color: $color-dark;
   color: $color-light;
   line-height: 1.5;
@@ -128,7 +127,6 @@ p, .p {
   color: $color-primary;
   font-weight: $font-weight-medium;
 }
-
 
 .pageContent {
   padding: 1rem; // default

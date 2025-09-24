@@ -1,5 +1,5 @@
-@import "../variables";
-@import "../mixins";
+@use "sass:color";
+@use "../abstracts" as *;
 
 .authContainer {
   display: flex;
@@ -16,7 +16,7 @@
   border-radius: 12px;
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   text-align: center;
 
   h1 {
@@ -52,8 +52,10 @@
     font-weight: $font-weight-medium;
     cursor: pointer;
 
+    // ✅ Replaced darken()
     &:hover {
-      background: darken($color-primary, 10%);
+      background: color.adjust($color-primary, $lightness: -10%);
+      // or: background: color.scale($color-primary, $lightness: -10%);
     }
   }
 }

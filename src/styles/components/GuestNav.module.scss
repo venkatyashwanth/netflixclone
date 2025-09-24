@@ -1,5 +1,4 @@
-@import "../variables";
-@import "../mixins";
+@use "../abstracts" as *;
 
 .guestNav {
   position: fixed;
