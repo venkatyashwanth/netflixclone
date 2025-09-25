@@ -14,11 +14,7 @@ const LocaleSwitcherSelect = () => {
     const nextLocale = e.target.value;
     console.log(locale);
     router.replace({pathname,params},{locale: nextLocale})
-    // router.replace(pathname,{locale: nextLocale});
-    // console.log(params);
   }
-
-
   return (
     <>
     <label>
