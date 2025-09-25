@@ -1,7 +1,9 @@
+"use cleint";
 import { useTranslations } from "next-intl";
 import styles from "@/styles/components/Navigation.module.scss";
 import LocaleSwitcherSelect from "./LocaleSwitcherSelect";
 import { Link } from "@/i18n/navigation";
+import LogoutButton from "../logout/LogoutButton";
 
 export default function DesktopNav({ isAuthenticated }) {
   const t = useTranslations('Navigation');
@@ -29,6 +31,7 @@ export default function DesktopNav({ isAuthenticated }) {
         <div className={styles.actions}>
           <button>🔔</button>
           <button>👤</button>
+          <LogoutButton/>
         </div>
       )}
     </div>
