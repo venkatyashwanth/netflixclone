@@ -1,7 +1,6 @@
 import { useLocale, useTranslations } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { useParams} from "next/navigation";
-// import { usePathname, useRouter } from "@/18n/navigation";
 import { usePathname,useRouter } from "@/i18n/navigation";
 
 const LocaleSwitcherSelect = () => {
@@ -13,8 +12,12 @@ const LocaleSwitcherSelect = () => {
 
   const onSelectChange = (e) => {
     const nextLocale = e.target.value;
+    console.log(locale);
     router.replace({pathname,params},{locale: nextLocale})
+    // router.replace(pathname,{locale: nextLocale});
+    // console.log(params);
   }
+
 
   return (
     <>

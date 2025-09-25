@@ -129,7 +129,7 @@ p, .p {
 }
 
 .pageContent {
-  padding: 1rem; // default
+  // padding: 1rem; // default
 
   // Mobile → top header + bottom nav
   @include respond-to(mobile) {
@@ -145,8 +145,8 @@ p, .p {
 
   // Desktop → top nav only
   @include respond-to(desktop) {
-    padding-top: 80px;  // height of .desktopNav
-    padding-bottom: 0;
+    // padding-top: 80px;  // height of .desktopNav
+    // padding-bottom: 0;
   }
 }
 

@@ -9,7 +9,9 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <AuthProvider>
-          <AppContainer>{children}</AppContainer>
+          <AppContainer>
+            {children}
+          </AppContainer>
         </AuthProvider>
       </body>
     </html>
