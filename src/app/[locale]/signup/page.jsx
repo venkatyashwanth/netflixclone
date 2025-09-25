@@ -8,7 +8,6 @@ export default function SignupPage() {
   return (
     <div className={styles.authContainer}>
       <div className={styles.authBox}>
-        {/* <h1>Sign Up</h1> */}
         <h1>{t('title')}</h1>
         <form className={styles.authForm}>
           <input type="text" placeholder={t("placeholder.fullname")} required />
