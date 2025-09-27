@@ -40,13 +40,16 @@ button {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: $color-dark;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #444;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #666;
 }
@@ -61,7 +64,8 @@ button {
 /* -------------------------
    2. Typography System
 -------------------------- */
-h1, .h1 {
+h1,
+.h1 {
   font-weight: $font-weight-bold;
   line-height: 1.2;
   font-size: $font-size-h1-mobile;
@@ -75,7 +79,8 @@ h1, .h1 {
   }
 }
 
-h2, .h2 {
+h2,
+.h2 {
   font-weight: $font-weight-medium;
   line-height: 1.3;
   font-size: $font-size-h2-mobile;
@@ -89,7 +94,8 @@ h2, .h2 {
   }
 }
 
-h3, .h3 {
+h3,
+.h3 {
   font-weight: $font-weight-medium;
   line-height: 1.4;
   font-size: $font-size-h3-mobile;
@@ -103,7 +109,8 @@ h3, .h3 {
   }
 }
 
-p, .p {
+p,
+.p {
   font-weight: $font-weight-regular;
   line-height: 1.6;
   font-size: $font-size-p-mobile;
@@ -133,14 +140,14 @@ p, .p {
 
   // Mobile → top header + bottom nav
   @include respond-to(mobile) {
-    padding-top: 60px;   // height of .mobileHeader
-    padding-bottom: 60px; // height of .mobileNav
+    // padding-top: 60px; // height of .mobileHeader
+    // padding-bottom: 60px; // height of .mobileNav
   }
 
   // Tablet → top nav only
   @include respond-to(tablet) {
-    padding-top: 70px;  // height of .tabletNav
-    padding-bottom: 0;
+    // padding-top: 70px; // height of .tabletNav
+    // padding-bottom: 0;
   }
 
   // Desktop → top nav only
@@ -151,15 +158,60 @@ p, .p {
 }
 
 .app {
-  min-height: 100vh;
+  min-height: 100dvh;
 
   &.app-auth {
     background-color: green;
   }
 
   &.app-guest {
-    // background-image: linear-gradient(#0000007e, #0000007e), url('/background_banner.jpg');
     background-image: linear-gradient(#0000007e, #0000007e), url('/guestbg.jpg');
-    background-size: cover;
+    background-size: contain;
+    background-position: center;
+  }
+}
+
+// Loading Animation
+.app-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  display: grid;
+  -webkit-mask: conic-gradient(from 15deg, #0000, #000);
+  animation: l26 1s infinite steps(12);
+
+  // shared styles for loader, before, after
+  &,
+  &::before,
+  &::after {
+    background:
+      radial-gradient(closest-side at 50% 12.5%,
+        #f03355 96%,
+        #0000) 50% 0 / 20% 80% repeat-y,
+      radial-gradient(closest-side at 12.5% 50%,
+        #f03355 96%,
+        #0000) 0 50% / 80% 20% repeat-x;
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    grid-area: 1 / 1;
+    transform: rotate(30deg);
+  }
+
+  &::after {
+    transform: rotate(60deg);
+  }
+}
+
+@keyframes l26 {
+  100% {
+    transform: rotate(1turn);
   }
 }
