@@ -1,0 +1,164 @@
+@use "../../abstracts" as *;
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  -webkit-tap-highlight-color: transparent;
+}
+
+// .input-wrapper, input[type="radio"], label.custom-radio { -webkit-tap-highlight-color: transparent; -webkit-focus-ring-color: rgba(0,0,0,0); outline: none; }
+
+.dropbtn {
+  background-color: rgba(22, 22, 22, 0.7);
+  border: 1px solid rgba(128, 128, 128, 0.7);
+  color: white;
+  padding: 6px 14px;
+  font-size: 14px;
+  // border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  @include respond-to(mobile) {
+    .lang {
+      display: none;
+    }
+  }
+}
+
+.dropdownContent {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  min-width: 140px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  margin-top: 6px;
+  padding: 6px 0;
+  z-index: 1000;
+  list-style: none;
+
+  li {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #f1f1f1;
+    }
+
+    &[aria-selected="true"] {
+      font-weight: bold;
+      background-color: #e6f7ff;
+    }
+  }
+}
+
+@include respond-to(mobile) {
+  .dropdownContent {
+    display: none;
+  }
+}
+
+/* Caret (down arrow) */
+.caret {
+  display: inline-block;
+  margin-left: 6px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid white;
+  transition: transform 0.2s ease;
+}
+
+.caret.open {
+  transform: rotate(180deg);
+}
+
+.mobilePopMenu {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+
+  .clsbtn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background-image: url('/clsIcn.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 28px;
+    height: 28px;
+  }
+
+  ul {
+    border-radius: 1.2rem 1.2rem 0 0;
+    padding: 1.2rem;
+    background-color: #000;
+    text-align: center;
+    border-top: 1px solid #333;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    animation: slideUp 0.4s ease-out forwards;
+
+    li {
+      list-style-type: none;
+      font-size: 1rem;
+      padding: 1rem;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      border-top: 2px solid $color-light;
+      width: 30px;
+      top: 20px;
+      left: 50%;
+      transform: translatex(-50%);
+    }
+  }
+
+
+
+  @include respond-to(desktop) {
+    display: none;
+  }
+
+  @include respond-to(tablet) {
+    display: none;
+  }
+}
+
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0.5;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(-50%) translateY(100%);
+    opacity: 0;
+  }
+}

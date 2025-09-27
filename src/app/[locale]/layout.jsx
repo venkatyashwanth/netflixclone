@@ -12,22 +12,26 @@ export default async function LocaleLayout({ children, params }) {
     notFound();
   }
   return (
-      <html lang={locale}>
-        <head>
-          <link rel="icon" href="/favicon.ico" sizes="any" />
-        </head>
-        <body>
-          <AuthProvider>
-            <AppContainer>
-              <NextIntlClientProvider>
-                <Navigation />
-                <main className="pageContent">
-                  {children}
-                </main>
-              </NextIntlClientProvider>
-            </AppContainer>
-          </AuthProvider>
-        </body>
-      </html>
+    <html lang={locale}>
+      <head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+        />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
+      <body>
+        <AuthProvider>
+          <AppContainer>
+            <NextIntlClientProvider>
+              <Navigation />
+              <main className="pageContent">
+                {children}
+              </main>
+            </NextIntlClientProvider>
+          </AppContainer>
+        </AuthProvider>
+      </body>
+    </html>
   )
 }
