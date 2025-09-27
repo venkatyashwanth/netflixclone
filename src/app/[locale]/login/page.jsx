@@ -1,10 +1,10 @@
 "use client";
-import { Link } from "@/i18n/navigation";
-import styles from "@/styles/components/Auth.module.scss";
+import { useState, useLayoutEffect } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { useAuth } from "@/components/contexts/Authcontext";
 import { useRouter } from "@/i18n/navigation";
-import { useState, useLayoutEffect } from "react";
+import styles from "@/styles/components/Auth.module.scss";
 
 export default function LoginPage() {
   const { login, isAuthenticated } = useAuth();
@@ -33,7 +33,7 @@ export default function LoginPage() {
     return (
       <div className={styles.authContainer}>
         <div className={styles.authBox}>
-          <p>Redirecting to dashboard...</p>
+          <p>Loading...</p>
         </div>
       </div>
     );

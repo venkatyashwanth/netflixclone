@@ -18,7 +18,7 @@ const Dashboard = () => {
     if (!isAuthenticated) {
         return (
             <div style={{padding: "100px 0",textAlign: "center"}}>
-                <p>Redirecting to login...</p>
+                <p>Loading...</p>
             </div>
         );
     }

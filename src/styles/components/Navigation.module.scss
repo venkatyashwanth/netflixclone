@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "../abstracts" as *;
 
 /* -----------------------
@@ -10,15 +11,16 @@
   right: 0;
   background: rgba(20, 20, 20, 0.95);
   padding: 0.6rem 1rem;
-  display: flex; // visible by default
   align-items: center;
   z-index: 1000;
   border-bottom: 1px solid #222;
 
   .logo {
-    font-size: 1.25rem;
-    font-weight: $font-weight-bold;
-    color: $color-primary;
+    img {
+      display: block;
+      width: 100px;
+      color: rgb(229, 9, 20);
+    }
   }
 }
 
@@ -46,8 +48,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
+    width: fit-content;
+    // height: 48px;
     border-radius: 8px;
 
     &:hover,
@@ -58,6 +60,18 @@
 
     &:focus {
       outline: 2px solid rgba(229, 9, 20, 0.12);
+    }
+  }
+
+  .loglink {
+    background-color: $color-primary;
+    text-transform: capitalize;
+    font-size: $font-size-a_nav-desktop;
+    padding: 6px 12px;
+    border-radius: 4px;
+
+    &:hover {
+      background: color.adjust($color-primary, $lightness: -10%);
     }
   }
 }
@@ -80,9 +94,11 @@
   border-bottom: 1px solid #222;
 
   .logo {
-    font-size: 1.4rem;
-    font-weight: $font-weight-bold;
-    color: $color-primary;
+    img {
+      display: block;
+      width: 100px;
+      color: rgb(229, 9, 20);
+    }
   }
 
   nav {
@@ -100,6 +116,16 @@
       &:hover,
       &.active {
         color: $color-primary;
+      }
+    }
+
+    .loglink {
+      background-color: $color-primary;
+      text-transform: capitalize;
+      font-size: $font-size-a_nav-desktop;
+
+      &:hover {
+        background: color.adjust($color-primary, $lightness: -10%);
       }
     }
   }
@@ -154,17 +180,29 @@
     a {
       color: $color-light;
       text-decoration: none;
-      font-size: $font-size-p-desktop;
+      font-size: $font-size-a_nav-desktop;
       padding: 0.25rem 0.5rem;
       border-radius: 4px;
 
-      &:hover {
-        color: $color-primary;
-      }
+      // &:hover {
+      //   color: $color-primary;
+      // }
 
       &.active {
         color: $color-primary;
         font-weight: $font-weight-medium;
+      }
+    }
+
+    .loglink {
+      color: $color-light;
+      text-transform: capitalize;
+      font-size: calc($font-size-a_nav-desktop) ;
+      font-weight: $font-weight-bold;
+
+      &:hover {
+        color: $color-primary;
+        // background: color.adjust($color-primary, $lightness: -10%);
       }
     }
   }
@@ -178,7 +216,7 @@
       background: none;
       border: none;
       color: $color-light;
-      font-size: 1.1rem;
+      font-size: 1rem;
       cursor: pointer;
 
       &:hover {
@@ -203,6 +241,7 @@
   .mobileHeader,
   .mobileNav {
     display: flex !important;
+    align-items: center;
   }
 }
 

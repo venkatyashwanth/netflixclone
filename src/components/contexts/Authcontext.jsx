@@ -1,21 +1,31 @@
 "use client";
+import Cookies from "js-cookie";
 import { createContext, useContext, useState, useEffect } from "react";
 import { getAuthToken, setAuthToken, removeAuthToken } from "@/lib/auth";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [isLoading, setIsLoading] = useState(true); // Add loading state
 
+  // useEffect(() => {
+  //   // Check auth token on component mount
+  //   const token = getAuthToken();
+  //   if (token) {
+  //     setIsAuthenticated(true);
+  //   }
+  //   setIsLoading(false); // Loading complete
+  // }, []);
+
+
   useEffect(() => {
-    // Check auth token on component mount
-    const token = getAuthToken();
-    if (token) {
-      setIsAuthenticated(true);
-    }
-    setIsLoading(false); // Loading complete
+    // Read token from cookie when app mounts
+    const token = Cookies.get("auth-token");
+    setIsAuthenticated(!!token);
   }, []);
+  
+
 
   const login = (token) => {
     setIsLoading(true);
