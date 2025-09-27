@@ -15,12 +15,26 @@ const LocaleSwitcherSelect = () => {
 
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   const buttonRef = useRef(null);
-  const listRef = useRef(null);
-  const wrapperRef = useRef(null); // ✅ wrap entire dropdown
+  const desktopDropdownRef = useRef(null);
+  const mobilePopupRef = useRef(null);
+  const mobileListRef = useRef(null); // ✅ New ref for the UL inside mobile popup
 
   const locales = routing.locales;
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const onSelectChange = (cur) => {
     setOpen(false);
@@ -60,25 +74,47 @@ const LocaleSwitcherSelect = () => {
 
   // Focus handling
   useEffect(() => {
-    if (open && listRef.current) {
-      const items = listRef.current.querySelectorAll("li");
-      items[activeIndex]?.focus();
+    if (open) {
+      const items = isMobile 
+        ? mobileListRef.current?.querySelectorAll("li")
+        : desktopDropdownRef.current?.querySelectorAll("li");
+      items?.[activeIndex]?.focus();
     }
-  }, [open, activeIndex]);
+  }, [open, activeIndex, isMobile]);
 
-  // ✅ Close on outside click
+  // ✅ Close on outside click - FIXED for mobile
   useEffect(() => {
     function handleClickOutside(e) {
-      if(open && 
-
-        listRef.current &&
-      !listRef.current.contains(e.target)
-      )
-      setOpen(false);
+      if (!open) return;
+      
+      if (isMobile) {
+        // Mobile: close if click is outside the UL list (but on the dark background)
+        // The mobilePopupRef is the dark overlay, mobileListRef is the white sheet
+        if (mobilePopupRef.current && 
+            mobileListRef.current && 
+            !mobileListRef.current.contains(e.target)) {
+          setOpen(false);
+        }
+      } else {
+        // Desktop: close if click is outside both dropdown and button
+        const isOutsideDropdown = desktopDropdownRef.current && 
+                                 !desktopDropdownRef.current.contains(e.target);
+        const isOutsideButton = buttonRef.current && 
+                               !buttonRef.current.contains(e.target);
+        
+        if (isOutsideDropdown && isOutsideButton) {
+          setOpen(false);
+        }
+      }
     }
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [open]);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [open, isMobile]);
 
   return (
     <div className={styles.dropdown}>
@@ -93,10 +129,30 @@ const LocaleSwitcherSelect = () => {
         <span className={`${styles.caret} ${open ? styles.open : ""}`}></span>
       </button>
 
-      {/* Desktop dropdown */}
-      {open && (
+      {/* Render only ONE dropdown based on device */}
+      {open && isMobile && (
+        <div ref={mobilePopupRef} className={styles.mobilePopMenu}>
+          <ul ref={mobileListRef} role="listbox" tabIndex={-1}> {/* ✅ Added ref here */}
+            <span onClick={() => setOpen(false)} className={styles.clsbtn}></span>
+            {locales.map((cur, idx) => (
+              <li
+                key={cur}
+                role="option"
+                aria-selected={cur === locale}
+                tabIndex={-1}
+                className={idx === activeIndex ? styles.activeOption : ""}
+                onClick={() => onSelectChange(cur)}
+              >
+                {t("locale", { locale: cur })}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {open && !isMobile && (
         <ul
-          ref={listRef}
+          ref={desktopDropdownRef}
           className={styles.dropdownContent}
           role="listbox"
           tabIndex={-1}
@@ -114,27 +170,6 @@ const LocaleSwitcherSelect = () => {
             </li>
           ))}
         </ul>
-      )}
-
-      {/* Mobile popup */}
-      {open && (
-        <div ref={wrapperRef} className={styles.mobilePopMenu} >
-          <ul ref={listRef} role="listbox" tabIndex={-1}>
-            <span onClick={() => setOpen(false)} className={styles.clsbtn}></span>
-            {locales.map((cur, idx) => (
-              <li
-                key={cur}
-                role="option"
-                aria-selected={cur === locale}
-                tabIndex={-1}
-                className={idx === activeIndex ? styles.activeOption : ""}
-                onClick={() => onSelectChange(cur)}
-              >
-                {t("locale", { locale: cur })}
-              </li>
-            ))}
-          </ul>
-        </div>
       )}
     </div>
   );
