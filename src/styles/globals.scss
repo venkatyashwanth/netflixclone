@@ -12,11 +12,30 @@
   box-sizing: border-box;
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: $color-dark;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
 html,
 body {
   height: 100%;
   width: 100%;
   font-family: $font-family-base;
+  font-weight: $font-weight-regular;
   background-color: $color-dark;
   color: $color-light;
   line-height: 1.5;
@@ -36,22 +55,17 @@ button {
   font-family: inherit;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
+input {
 
-::-webkit-scrollbar-track {
-  background: $color-dark;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #444;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #666;
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    -webkit-text-fill-color: $color-light !important;
+    background-color: transparent !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
 }
 
 /* Container utility */
@@ -126,7 +140,7 @@ p,
 }
 
 .small {
-  font-size: $font-size-small;
+  font-size: $font-size-small-desktop;
   color: #999;
 }
 
@@ -135,30 +149,10 @@ p,
   font-weight: $font-weight-medium;
 }
 
-.pageContent {
-  // padding: 1rem; // default
-
-  // Mobile → top header + bottom nav
-  @include respond-to(mobile) {
-    // padding-top: 60px; // height of .mobileHeader
-    // padding-bottom: 60px; // height of .mobileNav
-  }
-
-  // Tablet → top nav only
-  @include respond-to(tablet) {
-    // padding-top: 70px; // height of .tabletNav
-    // padding-bottom: 0;
-  }
-
-  // Desktop → top nav only
-  @include respond-to(desktop) {
-    // padding-top: 80px;  // height of .desktopNav
-    // padding-bottom: 0;
-  }
-}
 
 .app {
   min-height: 100dvh;
+  padding-top: 72px;
 
   &.app-auth {
     background-color: green;
@@ -168,6 +162,7 @@ p,
     background-image: linear-gradient(#0000007e, #0000007e), url('/guestbg.jpg');
     background-size: contain;
     background-position: center;
+    background-attachment: fixed;
   }
 }
 

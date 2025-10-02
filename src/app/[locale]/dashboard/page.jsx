@@ -14,15 +14,6 @@ const Dashboard = () => {
         }
     }, [isAuthenticated, router]);
 
-    // DON'T RENDER if not authenticated
-    if (!isAuthenticated) {
-        return (
-            <div style={{padding: "100px 0",textAlign: "center"}}>
-                <p>Loading...</p>
-            </div>
-        );
-    }
-
     return (
         <>
             <div style={{padding: "100px 0",textAlign: "center"}}>

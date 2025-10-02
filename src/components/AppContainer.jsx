@@ -1,25 +1,29 @@
 "use client";
 import "@/styles/globals.scss";
-import { useAuth } from "@/components/contexts/Authcontext";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function AppContainer({ children }) {
-    const { isAuthenticated } = useAuth();
+    const pathname = usePathname();
     const [mounted, setMounted] = useState(false);
+    const [isDashboard, setIsDashboard] = useState(false);
 
     useEffect(() => {
         setMounted(true);
-    }, []);
+        console.log(pathname);
+        setIsDashboard(pathname?.startsWith("/en/dashboard"))
+    }, [pathname]);
 
     if (!mounted) {
-        return <>
+        return (
             <div className="app app-loading">
                 <div className="loader"></div>
             </div>
-        </>
+        );
     }
+
     return (
-        <div className={isAuthenticated ? "app app-auth" : "app app-guest"}>
+        <div className={isDashboard ? "app app-auth" : "app app-guest"}>
             {children}
         </div>
     );

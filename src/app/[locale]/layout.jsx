@@ -21,16 +21,16 @@ export default async function LocaleLayout({ children, params }) {
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body>
-        <AuthProvider>
-          <AppContainer>
-            <NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <AuthProvider>
+            <AppContainer>
               <Navigation />
-              <main className="pageContent">
+              <main>
                 {children}
               </main>
-            </NextIntlClientProvider>
-          </AppContainer>
-        </AuthProvider>
+            </AppContainer>
+          </AuthProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   )
