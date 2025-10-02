@@ -1,29 +1,23 @@
-import { Link } from "@/i18n/navigation";
-import styles from "@/styles/components/Auth.module.scss";
-import { useTranslations } from "next-intl";
+import { redirect } from "next/navigation";
+import SignupClient from "./SignupClient";
 
-export default function SignupPage() {
-  const t = useTranslations('Signup');
+export const metadata= {
+  title: 'SignUp - Netflix Clone',
+  description: 'Sign up to access',
+};
 
-  return (
-    <div className={styles.authContainer}>
-      <div className={styles.authBox}>
-        <h1>{t('title')}</h1>
-        <form className={styles.authForm}>
-          <input type="text" placeholder={t("placeholder.fullname")} required />
-          <input type="email" placeholder={t("placeholder.email")} required />
-          <input type="password" placeholder={t("placeholder.password")} required />
-          <button className={styles.btnPrimary} type="submit">
-            {t("createaccount")}
-          </button>
-        </form>
-        <p className={styles.authText}>
-          {t("prompttext")}{" "}
-          <Link href="/login" className={styles.authLink}>
-            {t("login")}
-          </Link>
-        </p>
-      </div>
-    </div>
-  );
+// Fake server-side auth check
+async function checkAuth() {
+  return false; // Replace with real authentication logic
+}
+
+export default async function SignupPage() {
+  const isAuthenticated = await checkAuth();
+
+  // Redirect if already authenticated
+  if (isAuthenticated) {
+    redirect("/dashboard");
+  }
+
+  return <SignupClient />;
 }
