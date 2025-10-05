@@ -16,6 +16,7 @@ export default async function LoginPage() {
   const isAuthenticated = await checkAuth();
 
   if (isAuthenticated) {
+    console.log("trigger")
     redirect("/dashboard");
   }
 

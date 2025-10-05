@@ -1,98 +1,89 @@
 "use client";
-
-import { Link } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
+import { confirmPasswordReset } from "firebase/auth";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "@/contexts/Authcontext";
 import styles from "@/styles/components/Auth.module.scss";
-import { useRouter } from "next/navigation";
+import { auth } from "@/lib/firebase";
 
-export default function SignupClient() {
-    const { signup, user } = useAuth();
+export default function ResetPasswordPage() {
     const router = useRouter();
-    const t = useTranslations("Signup");
-    const [formData, setFormData] = useState({
-        username: "",
-        useremail: "",
-        password: "",
-        confirmpassword: "",
-    });
+    const [globalError, setGlobalError] = useState('');
+    const [message, setMessage] = useState('');
     const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
     const [show, setShow] = useState({ password: false, confirm: false });
     const [showToolTip, setShowToolTip] = useState({ password: false, confirm: false });
+    const [formData, setFormData] = useState({
+        resetpswrd: "",
+        cnfrmresetpswrd: ""
+    });
+    const [oobCode, setOobCode] = useState('');
+    const searchParams = useSearchParams();
+
     const passwordTooltipRef = useRef(null);
     const tooltipContentRef = useRef(null);
 
     // Refs for form fields
-    const nameInputRef = useRef(null);
-    const emailInputRef = useRef(null);
     const passwordInputRef = useRef(null);
     const confirmPasswordInputRef = useRef(null);
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-        // Clear error when user starts typing
-        if (errors[e.target.name]) {
-            setErrors(prev => ({ ...prev, [e.target.name]: "" }));
+    useEffect(() => {
+        // Get the oobCode from URL parameters
+        const code = searchParams.get('oobCode');
+        if (code) {
+            setOobCode(code);
+        } else {
+            setGlobalError('Invalid or expired reset link');
         }
-    };
+    }, [searchParams]);
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value })
+    }
 
     const validate = () => {
-        const { username, useremail, password, confirmpassword } = formData;
+        const { resetpswrd, cnfrmresetpswrd } = formData;
         const errs = {};
-        // Name Validation
-        if (!username.trim() || username.trim().length < 2) errs.name = "Name must be at least 2 characters.";
-        // Email Validation
-        if (!useremail || !/\S+@\S+\.\S+/.test(useremail)) errs.email = "Invalid Email";
-
         // Password validation with detailed rules
-        if (!password) {
-            errs.password = "Password is required";
+        if (!resetpswrd) {
+            errs.resetpswrd = "Password is required";
         } else {
             const passwordErrors = [];
 
-            if (password.length < 6) {
+            if (resetpswrd.length < 6) {
                 passwordErrors.push("At least 6 characters");
             }
-            if (!/[A-Z]/.test(password)) {
+            if (!/[A-Z]/.test(resetpswrd)) {
                 passwordErrors.push("One uppercase letter");
             }
-            if (!/[a-z]/.test(password)) {
+            if (!/[a-z]/.test(resetpswrd)) {
                 passwordErrors.push("One lowercase letter");
             }
-            if (!/\d/.test(password)) {
+            if (!/\d/.test(resetpswrd)) {
                 passwordErrors.push("One number");
             }
-            if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+            if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(resetpswrd)) {
                 passwordErrors.push("One special character");
             }
 
             if (passwordErrors.length > 0) {
-                errs.password = `Password must contain: ${passwordErrors.join(', ')}`;
+                errs.resetpswrd = `Password must contain: ${passwordErrors.join(', ')}`;
             }
         }
 
         // Confirm password validation
-        if (!confirmpassword) {
-            errs.cpassword = "Please confirm your password";
-        } else if (password !== confirmpassword) {
-            errs.cpassword = "Passwords do not match";
+        if (!cnfrmresetpswrd) {
+            errs.cresetpswrd = "Please confirm your password";
+        } else if (resetpswrd !== cnfrmresetpswrd) {
+            errs.cresetpswrd = "Passwords do not match";
         }
         return errs;
     };
-    // Redirect when user becomes authenticated (after successful signup)
-    // useEffect(() => {
-    //     console.log("where r u coming from??: ",user);
-    //     if (user) {
-    //         console.log("User authenticated, redirecting to dashboard");
-    //         router.push("/dashboard");
-    //     }
-    // }, [user, router]);
 
-    const handleSubmit = async (e) => {
+    const handleRequest = async (e) => {
         e.preventDefault();
         setErrors({});
-        const { useremail, password } = formData;
+        const { resetpswrd, cnfrmresetpswrd } = formData;
 
         const errs = validate();
         if (Object.keys(errs).length > 0) {
@@ -100,31 +91,31 @@ export default function SignupClient() {
             console.log("got errors");
 
             // Focus on first field with error for better accessibility
-            if (errs.name) {
-                nameInputRef.current?.focus();
-            } else if (errs.email) {
-                emailInputRef.current?.focus();
-            } else if (errs.password) {
+            if (errs.resetpswrd) {
                 passwordInputRef.current?.focus();
-            } else if (errs.cpassword) {
+            } else if (errs.cresetpswrd) {
                 confirmPasswordInputRef.current?.focus();
             }
             return;
         }
 
         try {
-            const userCredential = await signup(useremail, password);
-            const user = userCredential.user;
-            // await signup(useremail, password);
-            router.push("/dashboard");
+            setGlobalError('');
+            setMessage('');
+            setIsLoading(true);
+
+            await confirmPasswordReset(auth, oobCode, resetpswrd);
+            setMessage('Password reset successfully! Redirecting to login...');
+
+            setTimeout(() => {
+                router.push('/login');
+            }, 2000);
+
         } catch (error) {
-            if (error.code === 'auth/email-already-in-use') {
-                setErrors({ globalError: 'This email is already registered. Please try to log in.' });
-            } else {
-                setErrors('Failed to create account: ' + error.message);
-            }
+            setGlobalError('Failed to reset password: ' + error.message);
         }
-    };
+
+    }
 
     // Keyboard event handlers
     const handleTooltipKeyDown = (e, field) => {
@@ -152,6 +143,14 @@ export default function SignupClient() {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    if (!oobCode && !globalError) {
+        return (
+            <div>
+                <div>Loading...</div>
+            </div>
+        );
+    }
+
     const passwordRules = [
         "At least 6 characters",
         "One uppercase letter",
@@ -176,8 +175,8 @@ export default function SignupClient() {
 
     return (
         <div className={styles.authContainer}>
-            <div className={styles.authBox}>
-                <h1>{t("title")}</h1>
+            <div className={`${styles.authBox} ${styles.reset}`}>
+                <h1>Reset Password</h1>
                 {/* Live region for announcing errors to screen readers */}
                 <div
                     aria-live="assertive"
@@ -186,65 +185,11 @@ export default function SignupClient() {
                 >
                     {getErrorAnnouncement()}
                 </div>
-
-                <form className={styles.authForm} onSubmit={handleSubmit} noValidate>
-                    {/* Full Name field */}
+                <form className={styles.authForm} onSubmit={handleRequest}>
+                    {/* New Password */}
                     <div className={styles.inputWrp}>
-                        <label htmlFor="uname">Full Name</label>
-                        <input
-                            id="uname"
-                            type="text"
-                            name="username"
-                            value={formData.name}
-                            onChange={handleChange}
-                            placeholder={t("placeholder.fullname")}
-                            ref={nameInputRef}
-                            aria-describedby={errors.name ? "name-error" : undefined}
-                            aria-invalid={!!errors.name}
-                        />
-                        {errors.name && (
-                            <span
-                                id="name-error"
-                                className={styles.errorText}
-                                role="alert"
-                                aria-live="polite"
-                            >
-                                {errors.name}
-                            </span>
-                        )}
-                    </div>
-
-                    {/* Email field */}
-                    <div className={styles.inputWrp}>
-                        <label htmlFor="uemail">Email</label>
-                        <input
-                            id="uemail"
-                            type="email"
-                            name="useremail"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder={t("placeholder.email")}
-                            ref={emailInputRef}
-                            aria-describedby={errors.email ? "email-error" : undefined}
-                            aria-invalid={!!errors.email}
-                        />
-                        {errors.email && (
-                            <span
-                                id="email-error"
-                                className={styles.errorText}
-                                role="alert"
-                                aria-live="polite"
-                            >
-                                {errors.email}
-                            </span>
-                        )}
-                    </div>
-
-                    {/* Password field */}
-                    <div className={styles.inputWrp}>
-                        {/* <label htmlFor="upassword">Password</label> */}
                         <div className={styles.labelWithTooltip}>
-                            <label htmlFor="upassword">Password</label>
+                            <label htmlFor="resetpswrd">New Password</label>
                             <div
                                 ref={passwordTooltipRef}
                                 className={styles.tooltipIcon}
@@ -288,11 +233,11 @@ export default function SignupClient() {
                         </div>
                         <input
                             type={show.password ? "text" : "password"}
-                            id="upassword"
-                            name="password"
-                            value={formData.password}
+                            id="resetpswrd"
+                            name="resetpswrd"
+                            value={formData.resetpswrd}
                             onChange={handleChange}
-                            placeholder={t("placeholder.password")}
+                            placeholder="Enter New Password"
                             ref={passwordInputRef}
                             aria-describedby={errors.password ? "password-error" : undefined}
                             aria-invalid={!!errors.password}
@@ -310,28 +255,27 @@ export default function SignupClient() {
                                 <img src="/openeye.svg" alt="Show password" />
                             )}
                         </button>
-                        {errors.password && (
+                        {errors.resetpswrd && (
                             <span
                                 id="password-error"
                                 className={styles.errorText}
                                 role="alert"
                                 aria-live="polite"
                             >
-                                {errors.password}
+                                {errors.resetpswrd}
                             </span>
                         )}
                     </div>
-
-                    {/* Confirm Password field */}
+                    {/* Confirm New Password */}
                     <div className={styles.inputWrp}>
-                        <label htmlFor="ucpassword">Confirm Password</label>
+                        <label htmlFor="cnfrmresetpswrd">Confirm Password</label>
                         <input
                             type={show.confirm ? "text" : "password"}
-                            id="ucpassword"
-                            name="confirmpassword"
-                            value={formData.confirmpassword}
+                            id="cnfrmresetpswrd"
+                            name="cnfrmresetpswrd"
+                            value={formData.cnfrmresetpswrd}
                             onChange={handleChange}
-                            placeholder={t("placeholder.password")}
+                            placeholder="Confirm New Password"
                             ref={confirmPasswordInputRef}
                             aria-describedby={errors.cpassword ? "confirm-password-error" : undefined}
                             aria-invalid={!!errors.cpassword}
@@ -349,32 +293,39 @@ export default function SignupClient() {
                                 <img src="/openeye.svg" alt="Show password" />
                             )}
                         </button>
-                        {errors.cpassword && (
+                        {errors.cresetpswrd && (
                             <span
                                 id="confirm-password-error"
                                 className={styles.errorText}
                                 role="alert"
                                 aria-live="polite"
                             >
-                                {errors.cpassword}
+                                {errors.cresetpswrd}
                             </span>
                         )}
                     </div>
 
                     {/* Submit button */}
-                    <button className={styles.frmSbmt} type="submit">
-                        {t("createaccount")}
+                    <button
+                        type="submit"
+                        className={styles.frmSbmt}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? "Resetting Password..." : "Reset Password"}
                     </button>
                 </form>
-                {/* Login prompt */}
-                <p className={styles.authText}>
-                    {t("prompttext")}{" "}
-                    <Link href="/login" className={styles.authLink}>
-                        {t("login")}
-                    </Link>
-                </p>
-                {errors.globalError && (<span>{errors.globalError}</span>)}
+                {message && (
+                    <div className={styles.authText}>
+                        {message}
+                    </div>
+                )}
+
+                {globalError && (
+                    <div className={styles.authText}>
+                        {globalError}
+                    </div>
+                )}
             </div>
         </div>
-    );
+    )
 }

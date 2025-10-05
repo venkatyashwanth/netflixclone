@@ -2,10 +2,11 @@
 import { useTranslations } from "next-intl";
 import styles from "@/styles/components/Navigation.module.scss";
 import LocaleSwitcherSelect from "./LocaleSwitcherSelect";
-import { Link } from "@/i18n/navigation";
 import LogoutButton from "../logout/LogoutButton";
+import { useAuth } from "@/contexts/Authcontext";
 
-export default function DesktopNav({ isAuthenticated }) {
+export default function DesktopNav() {
+  const { user } = useAuth();
   const t = useTranslations('Navigation');
   return (
     <div className={styles.desktopNav}>
@@ -13,7 +14,7 @@ export default function DesktopNav({ isAuthenticated }) {
         <img src="/logo.svg" alt="logo" />
       </div>
       <nav>
-        {isAuthenticated ? (
+        {user ? (
           <>
             <a href="#">Home</a>
             <a href="#">TV Shows</a>
@@ -23,11 +24,10 @@ export default function DesktopNav({ isAuthenticated }) {
         ) : (
           <>
             <LocaleSwitcherSelect />
-            {/* <Link className={styles.loglink} href="/login">{t("signin")}</Link> */}
           </>
         )}
       </nav>
-      {isAuthenticated && (
+      {user && (
         <div className={styles.actions}>
           <button>🔔</button>
           <button>👤</button>
