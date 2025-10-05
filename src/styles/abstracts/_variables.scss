@@ -22,7 +22,8 @@ $breakpoint-large: 1440px;
 $font-family-base: 'Helvetica Neue', Arial, sans-serif;
 
 // Headings
-$font-size-h1-mobile: 2rem;
+// $font-size-h1-mobile: 2rem;
+$font-size-h1-mobile: clamp(1.5rem, 7vw, 2rem);
 $font-size-h1-tablet: 2.5rem;
 $font-size-h1-desktop: clamp(1.75rem,2vw + 1rem,3.5rem);
 
@@ -47,8 +48,10 @@ $font-size-small-desktop: clamp(0.875rem, 0.5vw + 0.75rem, 1rem);
 
 // form labels
 $font-size-label-desktop: clamp(0.875rem, 0.5vw + 0.75rem, 1rem);
+$font-size-label-mobile: clamp(1rem, 4.5vw, 1.125rem);
 $font-size-input-desktop: clamp(1rem, 0.6vw + 0.8rem, 1.25rem);
 $font-size-placeholder-desktop: clamp(0.875rem, 0.5vw + 0.75rem, 1rem);
+$font-size-placeholder-mobile: 1rem;
 
 // form button
 $font-size-submitbtn-desktop: clamp(1rem, 0.5vw + 0.75rem, 1.125rem);
