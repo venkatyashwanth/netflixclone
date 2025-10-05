@@ -3,6 +3,10 @@
 
 .authContainer {
   padding: 20px;
+
+  @include respond-to(mobile) {
+    padding: 20px 20px 80px 20px;
+  }
 }
 
 .authBox {
@@ -20,8 +24,9 @@
     margin-bottom: 1rem;
     text-align: center;
   }
-  &.reset{
-    h1{
+
+  &.reset {
+    h1 {
       font-size: 1.6rem;
     }
   }
@@ -39,7 +44,15 @@
     label {
       display: inline-block;
       margin-bottom: 0.5rem;
-      font-size: $font-size-label-desktop;
+      font-size: $font-size-label-mobile;
+
+      @include respond-to(desktop) {
+        font-size: $font-size-label-desktop;
+      }
+
+      &:focus-within {
+        color: #0066cc;
+      }
     }
 
     .labelWithTooltip {
@@ -132,6 +145,10 @@
       img {
         width: 26px;
       }
+
+      @include respond-to(mobile) {
+        top: 2.6rem;
+      }
     }
 
   }
@@ -151,7 +168,10 @@
 
     &::placeholder {
       text-transform: capitalize;
-      font-size: $font-size-placeholder-desktop;
+      font-size: $font-size-placeholder-mobile;
+      @include respond-to(desktop){
+        font-size: $font-size-placeholder-desktop;
+      }
     }
   }
 
@@ -171,6 +191,7 @@
       // background: color.scale($color-primary, $lightness: -10%);
     }
   }
+
   .errorText {
     color: #dc2626;
     font-size: 0.875rem; // text-sm
@@ -186,6 +207,7 @@
   text-align: center;
 
   .authLink {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     color: $color-primary;
     font-weight: $font-weight-medium;
     text-decoration: none;
