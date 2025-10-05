@@ -2,7 +2,7 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import Navigation from '@/components/navigation/Navigation';
-import { AuthProvider } from "@/components/contexts/Authcontext";
+import { AuthProvider } from "@/contexts/Authcontext";
 import AppContainer from "../../components/AppContainer";
 
 export default async function LocaleLayout({ children, params }) {

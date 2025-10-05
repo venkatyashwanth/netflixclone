@@ -1,44 +1,71 @@
 import createMiddleware from 'next-intl/middleware';
 import { NextResponse } from 'next/server';
 import { routing } from './i18n/routing';
+import { cookies } from 'next/headers';
 
 const intlMiddleware = createMiddleware(routing);
+const authRoutes = ['/login', '/signup'];
+const protectedRoutes = ['/dashboard'];
 
-function getToken(req) {
-  // Read token from cookie
-  const cookieHeader = req.headers.get('cookie') || '';
-  const tokenMatch = cookieHeader.match(/auth-token=([^;]+)/);
-  return tokenMatch ? tokenMatch[1] : false;
+export async function getAuthToken() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth-token');
+    return token?.value;
+  } catch (error) {
+    return null;
+  }
 }
 
-export function middleware(req) {
-  const token = getToken(req); // Now reads actual cookie
-  const url = req.nextUrl;
-  const pathname = url.pathname;
-  const locale = pathname.split('/')[1];
+export async function middleware(req) {
+  const { pathname } = req.nextUrl;
 
-  console.log('Middleware - Token exists:', !!token);
+  // Get the pathname without locale
+  const pathnameWithoutLocale = pathname.replace(/^\/(en|hi|te)/, '') || '/';
 
-  // Protect dashboard routes
-  if (!token && pathname.startsWith(`/${locale}/dashboard`)) {
-    console.log('Redirecting to login');
-    const loginUrl = new URL(`/${locale}/login`, req.url);
-    loginUrl.searchParams.set('alert', 'unauthorized');
-    return NextResponse.redirect(loginUrl);
+  // Check if the current locale is in the pathname
+  const locale = pathname.split('/')[1] || 'en';
+  const supportedLocales = ['en', 'hi', 'te'];
+  const currentLocale = supportedLocales.includes(locale) ? locale : 'en';
+
+  try {
+    const token = await getAuthToken();
+    const isAuthenticated = !!token;
+    console.log("Auth Status: ", isAuthenticated);
+
+    if (isAuthenticated) {
+      if (authRoutes.some(route => pathnameWithoutLocale.startsWith(route))) {
+        const redirectUrl = new URL(`/${currentLocale}/dashboard`, req.url);
+        return NextResponse.redirect(redirectUrl);
+      }
+    }
+    if (!isAuthenticated) {
+      if (protectedRoutes.some(route => pathnameWithoutLocale.startsWith(route))) {
+        const redirectUrl = new URL(`/login`, req.url);
+        return NextResponse.redirect(redirectUrl);
+      }
+    }
   }
-
-  // Redirect authenticated users away from login page
-  if (token && pathname.startsWith(`/${locale}/login`)) {
-    console.log('Redirecting to dashboard');
-    const dashboardUrl = new URL(`/${locale}/dashboard`, req.url);
-    return NextResponse.redirect(dashboardUrl);
+  catch (error) {
+    if (protectedRoutes.some(route => pathname.startsWith(route))) {
+      const redirectUrl = new URL(`/login`, req.url);
+      return NextResponse.redirect(redirectUrl);
+    }
+    return NextResponse.next();
   }
-
   return intlMiddleware(req);
 }
 
 export const config = {
   matcher: [
-    '/((?!api|trpc|_next|_vercel|.*\\..*).*)'
-  ]
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
 };

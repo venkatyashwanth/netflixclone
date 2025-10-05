@@ -20,6 +20,11 @@
     margin-bottom: 1rem;
     text-align: center;
   }
+  &.reset{
+    h1{
+      font-size: 1.6rem;
+    }
+  }
 }
 
 .authForm {
@@ -122,18 +127,13 @@
       position: absolute;
       top: 3rem;
       right: 1rem;
+      -webkit-tap-highlight-color: transparent;
 
       img {
         width: 26px;
       }
     }
 
-    .errorText {
-      color: #dc2626;
-      font-size: 0.875rem; // text-sm
-      margin-top: 0.25rem;
-      display: block;
-    }
   }
 
   input {
@@ -171,12 +171,19 @@
       // background: color.scale($color-primary, $lightness: -10%);
     }
   }
+  .errorText {
+    color: #dc2626;
+    font-size: 0.875rem; // text-sm
+    margin-top: 0.25rem;
+    display: block;
+  }
 }
 
 .authText {
   margin-top: 1rem;
   font-size: $font-size-small-desktop;
   color: $color-light-dull;
+  text-align: center;
 
   .authLink {
     color: $color-primary;
@@ -192,13 +199,13 @@
 
 // Screen reader only class - hides content visually but keeps it accessible
 .srOnly {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
