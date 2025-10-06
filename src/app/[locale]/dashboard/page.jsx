@@ -5,16 +5,8 @@ import { useEffect } from "react";
 // import { useLayoutEffect } from "react";
 
 const Dashboard = () => {
-    const { user,logout } = useAuth();
-    // const { isAuthenticated } = useAuth();
+    const { user, userData, logout } = useAuth();
     const router = useRouter();
-
-    // IMMEDIATE REDIRECT if not authenticated
-    // useLayoutEffect(() => {
-    //     if (!isAuthenticated) {
-    //         router.replace('/login');
-    //     }
-    // }, [isAuthenticated, router]);
     useEffect(() => {
         if (!user) {
             router.push('/login');
@@ -46,7 +38,7 @@ const Dashboard = () => {
     return (
         <>
             <div style={{ padding: "100px 0", textAlign: "center" }}>
-                <p>I am dashing...</p>
+                <p>Welcome Boss, {userData?.displayName || user?.email}!!!.. ✌️</p>
                 <button onClick={handleLogout}>Logout</button>
             </div>
         </>

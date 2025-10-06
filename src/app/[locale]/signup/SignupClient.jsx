@@ -80,19 +80,11 @@ export default function SignupClient() {
         }
         return errs;
     };
-    // Redirect when user becomes authenticated (after successful signup)
-    // useEffect(() => {
-    //     console.log("where r u coming from??: ",user);
-    //     if (user) {
-    //         console.log("User authenticated, redirecting to dashboard");
-    //         router.push("/dashboard");
-    //     }
-    // }, [user, router]);
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
-        const { useremail, password } = formData;
+        const { useremail, password,username } = formData;
 
         const errs = validate();
         if (Object.keys(errs).length > 0) {
@@ -113,7 +105,7 @@ export default function SignupClient() {
         }
 
         try {
-            const userCredential = await signup(useremail, password);
+            const userCredential = await signup(useremail, password, username);
             const user = userCredential.user;
             // await signup(useremail, password);
             router.push("/dashboard");
