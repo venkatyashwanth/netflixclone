@@ -7,29 +7,32 @@ export const metadata= {
   description: 'Sign in to your account',
 };
 
-async function checkAuth() {
-  return false;
-}
+// async function checkAuth() {
+//   return false;
+// }
 
 export default async function LoginPage() {
   const t = await getTranslations("Login");
-  const isAuthenticated = await checkAuth();
+  // const isAuthenticated = await checkAuth();
 
-  if (isAuthenticated) {
-    console.log("trigger")
-    redirect("/dashboard");
-  }
+  // if (isAuthenticated) {
+  //   console.log("trigger")
+  //   redirect("/dashboard");
+  // }
 
   return (
     <LoginClient
       translations={{
         title: t("title"),
+        email: t("email"),
+        password: t("password"),
         placeholderEmail: t("placeholder.email"),
         placeholderPassword: t("placeholder.password"),
         loggingIn: t("loggingIn"),
         signin: t("signin"),
         prompttext: t("prompttext"),
-        signup: t("signup")
+        signup: t("signup"),
+        forgotPassword: t("forgotPassword")
       }}
     />
   );

@@ -2,6 +2,7 @@
 import { useAuth } from "@/contexts/Authcontext";
 import { Link } from "@/i18n/navigation";
 import styles from "@/styles/components/Auth.module.scss";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
@@ -12,6 +13,7 @@ import { useRef, useState } from "react";
 
 export default function ForgotPasswordPage() {
     const router = useRouter();
+    const t = useTranslations("forgotPassword");
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState("");
@@ -30,7 +32,7 @@ export default function ForgotPasswordPage() {
     const validate = () => {
         const { verifyEmail } = formData;
         const errs = {};
-        if (!verifyEmail || !/\S+@\S+\.\S+/.test(verifyEmail)) errs.email = "Invalid Email";
+        if (!verifyEmail || !/\S+@\S+\.\S+/.test(verifyEmail)) errs.email = t("errMsg.msg1");
 
         return errs;
     }
@@ -81,7 +83,9 @@ export default function ForgotPasswordPage() {
     return (
         <div className={styles.authContainer}>
             <div className={`${styles.authBox} ${styles.reset}`}>
-                <h1>Recover Password</h1>
+                <h1>
+                    {t("title")}
+                </h1>
                 {/* Live region for announcing errors to screen readers */}
                 <div
                     aria-live="assertive"
@@ -93,7 +97,9 @@ export default function ForgotPasswordPage() {
                 <form className={styles.authForm} onSubmit={handleRequest} noValidate>
                     {/* Email Field */}
                     <div className={styles.inputWrp}>
-                        <label htmlFor="verifemail">Email</label>
+                        <label htmlFor="verifemail">
+                            {t("label.email")}
+                        </label>
                         <input
                             id="verifemail"
                             ref={emailInputRef}
@@ -101,7 +107,7 @@ export default function ForgotPasswordPage() {
                             name="verifyEmail"
                             value={formData.verifyEmail}
                             onChange={handleChange}
-                            placeholder="Enter your email"
+                            placeholder={t("placeholder.email")}
                             aria-describedby={errors.email ? "email-error" : undefined}
                             aria-invalid={!!errors.email}
                         />
@@ -124,7 +130,8 @@ export default function ForgotPasswordPage() {
                         className={styles.frmSbmt}
                         disabled={isLoading}
                     >
-                        {isLoading ? "submitting..." : "submit"}
+                        {isLoading ? `${t("submitbtn.submitting")}...` : t("submitbtn.submit")}
+                        {/* {isLoading ? t("submitbtn.submit"): `${t("submitbtn.submitting")}...` } */}
                     </button>
                     {
                         message && (
@@ -138,7 +145,8 @@ export default function ForgotPasswordPage() {
                 </form>
                 <p className={styles.authText}>
                     <Link href="/login" className={styles.authLink}>
-                        Back To Login
+                        {t("backtologin")}
+                        {/* Back To Login */}
                     </Link>
                 </p>
             </div>

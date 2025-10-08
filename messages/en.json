@@ -1,27 +1,77 @@
 {
   "Login": {
     "title": "login",
-    "placeholder": {
-      "email": "email",
-      "password":"password"
-    },
+    "email": "email",
+    "password": "password",
     "signin": "sign in",
     "signup": "sign up",
     "loggingIn": "logging in",
-    "prompttext": "Don’t have an account?"
-  },
-  "Signup":{
-    "title": "sign up",
+    "prompttext": "Don’t have an account?",
+    "forgotPassword": "Forgot Password",
     "placeholder": {
-      "fullname": "full name",
-      "email": "email",
-      "password": "password"
-    },
+      "email": "enter your email",
+      "password": "enter your password"
+    }
+  },
+  "Signup": {
+    "title": "sign up",
+    "displayname": "display name",
+    "email": "email",
+    "password": "password",
+    "confirmPassword": "confirm password",
     "createaccount": "create account",
     "prompttext": "Already have an account?",
-    "login": "log in"
+    "login": "log in",
+    "placeholder": {
+      "fullname": "enter display name",
+      "email": "enter your email",
+      "password": "enter your password",
+      "confirmpassword": "confirm your password"
+    },
+    "errmsgs": {
+      "name": "Name must be at least 2 characters.",
+      "email": "Invalid Email",
+      "password": {
+        "psw1": "Password is required",
+        "psw2": "At least 6 characters",
+        "psw3": "One uppercase letter",
+        "psw4": "One lowercase letter",
+        "psw5": "One number",
+        "psw6": "One special character",
+        "psw7": "Password must contain"
+      },
+      "confirmpassword": {
+        "cpsw1": "Please confirm your password",
+        "cpsw2": "Passwords do not match"
+      }
+    },
+    "pswrdeqs": {
+      "req1": "At least 6 characters",
+      "req2": "One uppercase letter",
+      "req3": "One lowercase letter",
+      "req4": "One number",
+      "req5": "One special character"
+    },
+    "passwordRequirements": "Password Requirements"
   },
-  "Navigation":{
+  "forgotPassword": {
+    "title": "Recover Password",
+    "label": {
+      "email": "email"
+    },
+    "placeholder": {
+      "email": "Enter your email"
+    },
+    "submitbtn":{
+      "submitting":"submitting",
+      "submit": "submit"
+    },
+    "errMsg":{
+      "msg1":"Invalid Email"
+    },
+    "backtologin":"back to login"
+  },
+  "Navigation": {
     "signin": "sign in",
     "language": "language"
   },

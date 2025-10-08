@@ -14,19 +14,31 @@ export default function DesktopNav() {
         <img src="/logo.svg" alt="logo" />
       </div>
       <nav>
-        {user ? (
+        {
+          user && (
+            <>
+              <a href="#">Home</a>
+              {/* <a href="#">TV Shows</a>
+            <a href="#">Movies</a>
+            <a href="#">My List</a> */}
+            </>
+          )
+        }
+        {/* {user ? (
           <>
             <a href="#">Home</a>
-            <a href="#">TV Shows</a>
-            <a href="#">Movies</a>
-            <a href="#">My List</a>
           </>
         ) : (
           <>
             <LocaleSwitcherSelect />
           </>
-        )}
+        )} */}
       </nav>
+      {!user &&
+        <div className={styles.localeSwitcher}>
+          <LocaleSwitcherSelect />
+        </div>
+      }
       {user && (
         <div className={styles.actions}>
           <button>🔔</button>

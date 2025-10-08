@@ -24,10 +24,6 @@ export default function LoginClient({ translations }) {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    // Clear error when user starts typing
-    // if (errors[e.target.name]) {
-    //   setErrors(prev => ({ ...prev, [e.target.name]: "" }));
-    // }
   }
 
   const validate = () => {
@@ -74,8 +70,7 @@ export default function LoginClient({ translations }) {
         },
         body: JSON.stringify({ token }),
       });
-      router.push(`/dashboard`);
-      console.log("form is submitted");
+      router.push(`/home`);
     } catch (error) {
       if (error.code === 'auth/invalid-credential') {
         setErrors({ globalError: 'Check Your Credentials' });
@@ -112,7 +107,9 @@ export default function LoginClient({ translations }) {
         <form className={styles.authForm} onSubmit={handleLogin}>
           {/* Email field */}
           <div className={styles.inputWrp}>
-            <label htmlFor="regemail">Email</label>
+            <label htmlFor="regemail">
+              {translations.email}
+            </label>
             <input
               ref={emailInputRef}
               id="regemail"
@@ -140,7 +137,9 @@ export default function LoginClient({ translations }) {
 
           {/* Password field with toggle */}
           <div className={styles.inputWrp}>
-            <label htmlFor="regpassword">Password</label>
+            <label htmlFor="regpassword">
+              {translations.password}
+            </label>
             <input
               type={showPassword ? "text" : "password"}
               ref={passwordInputRef}
@@ -198,7 +197,7 @@ export default function LoginClient({ translations }) {
         </p>
         <div className={styles.authText}>
           <Link href="/forgot-password" className={styles.authLink}>
-            Forgot Password!
+            {translations.forgotPassword}!
           </Link>
         </div>
       </div>

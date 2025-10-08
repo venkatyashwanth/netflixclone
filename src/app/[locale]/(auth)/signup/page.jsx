@@ -7,17 +7,17 @@ export const metadata= {
 };
 
 // Fake server-side auth check
-async function checkAuth() {
-  return false; // Replace with real authentication logic
-}
+// async function checkAuth() {
+//   return false; // Replace with real authentication logic
+// }
 
 export default async function SignupPage() {
-  const isAuthenticated = await checkAuth();
+  // const isAuthenticated = await checkAuth();
 
   // Redirect if already authenticated
-  if (isAuthenticated) {
-    redirect("/dashboard");
-  }
+  // if (isAuthenticated) {
+  //   redirect("/dashboard");
+  // }
 
   return <SignupClient />;
 }
