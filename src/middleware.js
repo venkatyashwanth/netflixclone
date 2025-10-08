@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 
 const intlMiddleware = createMiddleware(routing);
 const authRoutes = ['/login', '/signup'];
-const protectedRoutes = ['/dashboard'];
+const protectedRoutes = ['/home', '/dashboard', '/profile']; // All protected routes
 
 export async function getAuthToken() {
   try {
@@ -31,41 +31,48 @@ export async function middleware(req) {
   try {
     const token = await getAuthToken();
     const isAuthenticated = !!token;
-    console.log("Auth Status: ", isAuthenticated);
+    console.log("Middleware - Auth:", isAuthenticated, "Path:", pathnameWithoutLocale);
 
+    // If user is authenticated
     if (isAuthenticated) {
+      // ONLY redirect from auth pages (login/signup) to home
       if (authRoutes.some(route => pathnameWithoutLocale.startsWith(route))) {
-        const redirectUrl = new URL(`/${currentLocale}/dashboard`, req.url);
+        console.log("Redirecting from auth page to home");
+        const redirectUrl = new URL(`/${currentLocale}/home`, req.url);
         return NextResponse.redirect(redirectUrl);
       }
+      
+      // ALLOW access to all protected routes (home, dashboard, profile, etc.)
+      // No redirect needed - user can access any protected route
+      console.log("Allowing access to protected route:", pathnameWithoutLocale);
+      return intlMiddleware(req);
     }
+    
+    // If user is NOT authenticated
     if (!isAuthenticated) {
+      // Redirect from protected routes to login
       if (protectedRoutes.some(route => pathnameWithoutLocale.startsWith(route))) {
+        console.log("Redirecting from protected route to login");
         const redirectUrl = new URL(`/login`, req.url);
         return NextResponse.redirect(redirectUrl);
       }
     }
   }
   catch (error) {
-    if (protectedRoutes.some(route => pathname.startsWith(route))) {
+    console.error("Middleware auth error:", error);
+    // On error, redirect protected routes to login
+    const pathnameWithoutLocale = pathname.replace(/^\/(en|hi|te)/, '') || '/';
+    if (protectedRoutes.some(route => pathnameWithoutLocale.startsWith(route))) {
       const redirectUrl = new URL(`/login`, req.url);
       return NextResponse.redirect(redirectUrl);
     }
-    return NextResponse.next();
   }
+  
   return intlMiddleware(req);
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
     '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };

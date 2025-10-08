@@ -8,7 +8,7 @@ import styles from "@/styles/components/Auth.module.scss";
 import { useRouter } from "next/navigation";
 
 export default function SignupClient() {
-    const { signup, user } = useAuth();
+    const { signup } = useAuth();
     const router = useRouter();
     const t = useTranslations("Signup");
     const [formData, setFormData] = useState({
@@ -20,6 +20,7 @@ export default function SignupClient() {
     const [errors, setErrors] = useState({});
     const [show, setShow] = useState({ password: false, confirm: false });
     const [showToolTip, setShowToolTip] = useState({ password: false, confirm: false });
+    const [isSubmitting,setIsSubmitting] = useState(false);
     const passwordTooltipRef = useRef(null);
     const tooltipContentRef = useRef(null);
 
@@ -41,50 +42,49 @@ export default function SignupClient() {
         const { username, useremail, password, confirmpassword } = formData;
         const errs = {};
         // Name Validation
-        if (!username.trim() || username.trim().length < 2) errs.name = "Name must be at least 2 characters.";
+        if (!username.trim() || username.trim().length < 2) errs.name = t("errmsgs.name");
         // Email Validation
-        if (!useremail || !/\S+@\S+\.\S+/.test(useremail)) errs.email = "Invalid Email";
-
+        if (!useremail || !/\S+@\S+\.\S+/.test(useremail)) errs.email = t("errmsgs.email");
         // Password validation with detailed rules
         if (!password) {
-            errs.password = "Password is required";
+            errs.password = t("errmsgs.password.psw1");
         } else {
             const passwordErrors = [];
 
             if (password.length < 6) {
-                passwordErrors.push("At least 6 characters");
+                passwordErrors.push(t("errmsgs.password.psw2"));
             }
             if (!/[A-Z]/.test(password)) {
-                passwordErrors.push("One uppercase letter");
+                passwordErrors.push(t("errmsgs.password.psw3"));
             }
             if (!/[a-z]/.test(password)) {
-                passwordErrors.push("One lowercase letter");
+                passwordErrors.push(t("errmsgs.password.psw4"));
             }
             if (!/\d/.test(password)) {
-                passwordErrors.push("One number");
+                passwordErrors.push(t("errmsgs.password.psw5"));
             }
             if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
-                passwordErrors.push("One special character");
+                passwordErrors.push(t("errmsgs.password.psw6"));
             }
 
             if (passwordErrors.length > 0) {
-                errs.password = `Password must contain: ${passwordErrors.join(', ')}`;
+                errs.password = `${t("errmsgs.password.psw7")}: ${passwordErrors.join(', ')}`;
             }
         }
 
         // Confirm password validation
         if (!confirmpassword) {
-            errs.cpassword = "Please confirm your password";
+            errs.cpassword = t("errmsgs.confirmpassword.cpsw1");
         } else if (password !== confirmpassword) {
-            errs.cpassword = "Passwords do not match";
+            errs.cpassword = t("errmsgs.confirmpassword.cpsw2");
         }
         return errs;
     };
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
-        const { useremail, password,username } = formData;
+        const { useremail, password, username } = formData;
 
         const errs = validate();
         if (Object.keys(errs).length > 0) {
@@ -105,16 +105,17 @@ export default function SignupClient() {
         }
 
         try {
+            setIsSubmitting(true);
             const userCredential = await signup(useremail, password, username);
             const user = userCredential.user;
-            // await signup(useremail, password);
-            router.push("/dashboard");
+            setIsSubmitting(false);
         } catch (error) {
             if (error.code === 'auth/email-already-in-use') {
                 setErrors({ globalError: 'This email is already registered. Please try to log in.' });
             } else {
                 setErrors('Failed to create account: ' + error.message);
             }
+            setIsSubmitting(false);
         }
     };
 
@@ -145,16 +146,16 @@ export default function SignupClient() {
     }, []);
 
     const passwordRules = [
-        "At least 6 characters",
-        "One uppercase letter",
-        "One lowercase letter",
-        "One number",
-        "One special character"
+        t("pswrdeqs.req1"),
+        t("pswrdeqs.req2"),
+        t("pswrdeqs.req3"),
+        t("pswrdeqs.req4"),
+        t("pswrdeqs.req5")
     ];
 
     // Generate tooltip content as a single string for screen readers
     const getTooltipContent = () => {
-        return `Password Requirements: ${passwordRules.join(', ')}`;
+        return `${t("passwordRequirements")}: ${passwordRules.join(', ')}`;
     };
 
     // Live region for announcing errors
@@ -182,7 +183,9 @@ export default function SignupClient() {
                 <form className={styles.authForm} onSubmit={handleSubmit} noValidate>
                     {/* Full Name field */}
                     <div className={styles.inputWrp}>
-                        <label htmlFor="uname">Full Name</label>
+                        <label htmlFor="uname">
+                            {t("displayname")}
+                        </label>
                         <input
                             id="uname"
                             type="text"
@@ -208,7 +211,9 @@ export default function SignupClient() {
 
                     {/* Email field */}
                     <div className={styles.inputWrp}>
-                        <label htmlFor="uemail">Email</label>
+                        <label htmlFor="uemail">
+                            {t("email")}
+                        </label>
                         <input
                             id="uemail"
                             type="email"
@@ -236,7 +241,9 @@ export default function SignupClient() {
                     <div className={styles.inputWrp}>
                         {/* <label htmlFor="upassword">Password</label> */}
                         <div className={styles.labelWithTooltip}>
-                            <label htmlFor="upassword">Password</label>
+                            <label htmlFor="upassword">
+                                {t("password")}
+                            </label>
                             <div
                                 ref={passwordTooltipRef}
                                 className={styles.tooltipIcon}
@@ -268,7 +275,7 @@ export default function SignupClient() {
                                         role="tooltip"
                                         ref={tooltipContentRef}
                                     >
-                                        <h4>Password Requirements:</h4>
+                                        <h4>{t("passwordRequirements")}:</h4>
                                         <ul>
                                             {passwordRules.map((rule, index) => (
                                                 <li key={index}>{rule}</li>
@@ -316,14 +323,16 @@ export default function SignupClient() {
 
                     {/* Confirm Password field */}
                     <div className={styles.inputWrp}>
-                        <label htmlFor="ucpassword">Confirm Password</label>
+                        <label htmlFor="ucpassword">
+                            {t("confirmPassword")}
+                        </label>
                         <input
                             type={show.confirm ? "text" : "password"}
                             id="ucpassword"
                             name="confirmpassword"
                             value={formData.confirmpassword}
                             onChange={handleChange}
-                            placeholder={t("placeholder.password")}
+                            placeholder={t("placeholder.confirmpassword")}
                             ref={confirmPasswordInputRef}
                             aria-describedby={errors.cpassword ? "confirm-password-error" : undefined}
                             aria-invalid={!!errors.cpassword}
@@ -354,8 +363,8 @@ export default function SignupClient() {
                     </div>
 
                     {/* Submit button */}
-                    <button className={styles.frmSbmt} type="submit">
-                        {t("createaccount")}
+                    <button className={styles.frmSbmt} type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? "Creating..." : t("createaccount")}
                     </button>
                 </form>
                 {/* Login prompt */}
