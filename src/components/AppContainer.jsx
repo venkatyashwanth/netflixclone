@@ -5,22 +5,22 @@ import { useEffect, useState } from "react";
 
 // Define all your protected routes here
 const PROTECTED_ROUTES = [
-  '/home',
-  '/dashboard',
-  '/profile',
-  '/settings'
-  // Add more protected routes as needed
+    '/home',
+    '/dashboard',
+    '/profile',
+    '/settings'
+    // Add more protected routes as needed
 ];
 
 // Helper function to check if current path is protected
 const isProtectedRoute = (pathname) => {
-  return PROTECTED_ROUTES.some(route => 
-    pathname.startsWith(route) || 
-    pathname.startsWith(`/en${route}`) || 
-    pathname.startsWith(`/hi${route}`) ||
-    pathname.startsWith(`/te${route}`) 
-    // Add other locales if needed
-  );
+    return PROTECTED_ROUTES.some(route =>
+        pathname.startsWith(route) ||
+        pathname.startsWith(`/en${route}`) ||
+        pathname.startsWith(`/hi${route}`) ||
+        pathname.startsWith(`/te${route}`)
+        // Add other locales if needed
+    );
 };
 
 

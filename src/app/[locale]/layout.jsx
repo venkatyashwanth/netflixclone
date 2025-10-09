@@ -4,6 +4,7 @@ import { routing } from '@/i18n/routing';
 import Navigation from '@/components/navigation/Navigation';
 import { AuthProvider } from "@/contexts/Authcontext";
 import AppContainer from "../../components/AppContainer";
+import { ScrollProvider } from '@/contexts/ScrollContext';
 
 export default async function LocaleLayout({ children, params }) {
   // Ensure that the incoming `locale` is valid
@@ -21,16 +22,18 @@ export default async function LocaleLayout({ children, params }) {
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body>
-        <NextIntlClientProvider>
-          <AuthProvider>
-            <AppContainer>
-              <Navigation />
-              <main>
-                {children}
-              </main>
-            </AppContainer>
-          </AuthProvider>
-        </NextIntlClientProvider>
+        <ScrollProvider>
+          <NextIntlClientProvider>
+            <AuthProvider>
+              <AppContainer>
+                <Navigation />
+                <main>
+                  {children}
+                </main>
+              </AppContainer>
+            </AuthProvider>
+          </NextIntlClientProvider>
+        </ScrollProvider>
       </body>
     </html>
   )

@@ -4,12 +4,15 @@ import styles from "@/styles/components/Navigation.module.scss";
 import LocaleSwitcherSelect from "./LocaleSwitcherSelect";
 import LogoutButton from "../logout/LogoutButton";
 import { useAuth } from "@/contexts/Authcontext";
+import { useScroll } from "@/contexts/ScrollContext";
 
 export default function DesktopNav() {
   const { user } = useAuth();
   const t = useTranslations('Navigation');
+
+  const { isScrolled } = useScroll();
   return (
-    <div className={styles.desktopNav}>
+    <div className={`${styles.desktopNav} ${isScrolled ? styles.navScrolled : ''}`}>
       <div className={styles.logo}>
         <img src="/logo.svg" alt="logo" />
       </div>

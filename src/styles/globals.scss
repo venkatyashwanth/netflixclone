@@ -151,7 +151,7 @@ p,
 
 .app {
   min-height: 100dvh;
-  padding-top: 72px;
+  // padding-top: 72px;
 
   &.app-auth {
     background-color: $color-primary;
@@ -162,8 +162,10 @@ p,
     background-size: contain;
     background-position: center;
     background-attachment: fixed;
+    padding-top: 72px;
   }
 }
+
 
 // Loading Animation
 .app-loading {
