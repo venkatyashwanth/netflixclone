@@ -36,7 +36,6 @@ body {
   width: 100%;
   font-family: $font-family-base;
   font-weight: $font-weight-regular;
-  background-color: $color-dark;
   color: $color-light;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -56,6 +55,7 @@ button {
 }
 
 input {
+
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus,
@@ -154,7 +154,17 @@ p,
   // padding-top: 72px;
 
   &.app-auth {
-    background-color: $color-primary;
+    background-color: transparent;
+
+    /* Mobile-only (<=480px) */
+    @include respond-to(mobile) {
+      background-color: red;
+    }
+
+    /* Tablet-only (481px–1023px) */
+    @include respond-to(tablet) {
+      background-color: blue;
+    }
   }
 
   &.app-guest {
